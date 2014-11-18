@@ -1,5 +1,5 @@
 """
-Contains generic wagtail view functions.
+Contains generic class-based CRUD views.
 """
 from django.contrib import messages
 from django.shortcuts import redirect
