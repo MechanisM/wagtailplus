@@ -1,5 +1,5 @@
 """
-
+Contains form class definitions.
 """
 from django import forms
 
