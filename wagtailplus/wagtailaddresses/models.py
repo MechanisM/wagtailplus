@@ -4,8 +4,8 @@ Contains model class definitions.
 import json
 import urllib2
 
-from django.contrib.gis.db import models
-from django.contrib.gis.geos import Point
+from django.conf import settings
+#from django.contrib.gis.geos import Point
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.http import urlencode
 from django.utils.translation import ugettext_lazy as _
@@ -22,6 +22,20 @@ from .app_settings import ADDRESS_FORMAT
 from .app_settings import ADDRESS_FORMAT_FIELDS
 from .edit_handlers import AddressComponentChooserPanel
 
+
+# Test for GIS app - probably a better way to do this...
+if 'django.contrib.gis' in settings.INSTALLED_APPS:
+    # Use GIS-enabled classes.
+    from django.contrib.gis.db import models
+    GEO_ENABLED = True
+    geom_field  = models.PointField(_('Geometry'), srid=4326, blank=True, null=True, editable=False)
+    addr_mgr    = models.GeoManager()
+else:
+    # Fall back to standard classes.
+    from django.db import models
+    GEO_ENABLED = False
+    geom_field  = models.CharField(_(u'Geometry'), max_length=50, blank=True, editable=False)
+    addr_mgr    = models.Manager()
 
 @python_2_unicode_compatible
 class AddressComponent(models.Model, TagSearchable):
@@ -56,7 +70,7 @@ class Address(models.Model, TagSearchable):
     Stores a composite address record.
     """
     created_at      = models.DateTimeField(_(u'Created'), auto_now_add=True)
-    geom            = models.PointField(_('Geometry'), srid=4326, blank=True, null=True, editable=False)
+    geom            = geom_field #models.PointField(_('Geometry'), srid=4326, blank=True, null=True, editable=False)
     label           = models.CharField(_(u'Label'), max_length=200, unique=True, editable=False)
     street_number   = models.CharField(_(u'Street Number'), max_length=6, db_index=True)
     route           = models.ForeignKey('wagtailaddresses.AddressComponent', verbose_name=ADDRESS_ATTR_MAP['route'], related_name='+')
@@ -66,6 +80,7 @@ class Address(models.Model, TagSearchable):
     postal_code     = models.ForeignKey('wagtailaddresses.AddressComponent', verbose_name=ADDRESS_ATTR_MAP['postal_code'], related_name='+')
     country         = models.ForeignKey('wagtailaddresses.AddressComponent', verbose_name=ADDRESS_ATTR_MAP['country'], related_name='+')
     tags            = TaggableManager(help_text=None, blank=True, verbose_name=_('Tags'))
+    objects         = addr_mgr
 
     class Meta(object):
         verbose_name        = _(u'Address')
@@ -87,7 +102,10 @@ class Address(models.Model, TagSearchable):
         """
         lat = None
         if self.geom:
-            lat = self.geom.y
+            if GEO_ENABLED:
+                lat = self.geom.y
+            else:
+                lat, lon = self.geom.split(',')
         return lat
 
     @property
@@ -99,7 +117,10 @@ class Address(models.Model, TagSearchable):
         """
         lon = None
         if self.geom:
-            lon = self.geom.x
+            if GEO_ENABLED:
+                lon = self.geom.x
+            else:
+                lat, lon = self.geom.split(',')
         return lon
 
     def __str__(self):
@@ -137,12 +158,20 @@ class Address(models.Model, TagSearchable):
         self.label  = self.__str__()
         data        = self.get_geocode_data()
         if data:
-            # Set the address geometry with SRID = 4326.
-            self.geom = Point(
-                data['geometry']['location']['lng'],
-                data['geometry']['location']['lat'],
-                srid=4326
-            )
+            if GEO_ENABLED:
+                # Set the address geometry with SRID = 4326.
+                self.geom = Point(
+                    data['geometry']['location']['lng'],
+                    data['geometry']['location']['lat'],
+                    srid=4326
+                )
+            else:
+                # Simply store the latitude and longitude.
+                self.geom = '{0},{1}'.format(
+                    data['geometry']['location']['lat'],
+                    data['geometry']['location']['lng'],
+                )
+
         super(Address, self).save(*args, **kwargs)
 
     @classmethod
