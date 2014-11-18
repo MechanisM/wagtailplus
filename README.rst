@@ -26,3 +26,7 @@ Add Wagtail Plus to INSTALLED_APPS in your project's settings **BEFORE** the Wag
         'wagtailplus.wagtailevents',
         'wagtailplus.wagtaillinks',
     )
+
+Documentation
+~~~~~~~~~~~~~
+Coming soon!
