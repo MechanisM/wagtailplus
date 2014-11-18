@@ -1,4 +1,4 @@
-.. image:: http://i.imgur.com/Atbtsr2.png
+.. image:: http://i.imgur.com/UPmcr7m.png
 
 Wagtail Plus
 ============
