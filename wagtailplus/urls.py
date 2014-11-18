@@ -6,6 +6,8 @@ from django.conf.urls import url
 from wagtailplus.wagtaillinks.views import choosers
 
 
+# Override default link chooser URLs, as we are storing both external
+# and email links in models.
 urlpatterns = [
     url(
         r'^choose-external-link/$',
