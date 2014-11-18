@@ -1,5 +1,5 @@
 """
-Contains address chooser view functions.
+Contains generic classed-based chooser views.
 """
 import json
 
@@ -19,6 +19,8 @@ def get_model_permission(permission, model):
     """
     Returns specified permission string.
 
+    :param permission: the permission string.
+    :param model: the model instance.
     :rtype: str.
     """
     return '{0}.{1}_{2}'.format(
