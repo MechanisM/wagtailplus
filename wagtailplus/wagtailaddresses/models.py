@@ -5,7 +5,7 @@ import json
 import urllib2
 
 from django.conf import settings
-#from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.http import urlencode
 from django.utils.translation import ugettext_lazy as _
