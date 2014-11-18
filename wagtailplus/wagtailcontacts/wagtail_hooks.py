@@ -1,3 +1,6 @@
+"""
+Contains Wagtail CMS integration hooks.
+"""
 from django.conf.urls import include
 from django.conf.urls import url
 from django.core.urlresolvers import reverse
