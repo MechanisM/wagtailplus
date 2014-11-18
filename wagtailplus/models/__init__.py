@@ -1,0 +1,1 @@
+from .mailchimp_page import *
