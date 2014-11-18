@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 from wagtail.wagtailadmin.edit_handlers import BaseChooserPanel
 
 
-class BaseLinkChooserPanel(BaseChooserPanel):
+class BaseContactChooserPanel(BaseChooserPanel):
     """
     Address component chooser panel class.
     """
@@ -21,6 +21,6 @@ def ContactChooserPanel(field_name):
 
     :param field_name: field name of chosen model.
     """
-    return type('_ContactChooserPanel', (BaseLinkChooserPanel,), {
+    return type('_ContactChooserPanel', (BaseContactChooserPanel,), {
         'field_name': field_name,
     })
