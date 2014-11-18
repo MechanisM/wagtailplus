@@ -70,7 +70,7 @@ class Address(models.Model, TagSearchable):
     Stores a composite address record.
     """
     created_at      = models.DateTimeField(_(u'Created'), auto_now_add=True)
-    geom            = geom_field #models.PointField(_('Geometry'), srid=4326, blank=True, null=True, editable=False)
+    geom            = geom_field
     label           = models.CharField(_(u'Label'), max_length=200, unique=True, editable=False)
     street_number   = models.CharField(_(u'Street Number'), max_length=6, db_index=True)
     route           = models.ForeignKey('wagtailaddresses.AddressComponent', verbose_name=ADDRESS_ATTR_MAP['route'], related_name='+')
