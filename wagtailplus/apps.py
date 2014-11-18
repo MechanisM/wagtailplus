@@ -5,6 +5,6 @@ from django.apps import AppConfig
 
 
 class WagtailDocsAppConfig(AppConfig):
-    name            = 'wagtailplusnts'
+    name            = 'wagtailplus'
     label           = 'wagtailplus'
     verbose_name    = 'Wagtail Plus'
