@@ -1,3 +1,6 @@
+"""
+Contains model class definitions.
+"""
 import calendar
 from collections import OrderedDict
 from datetime import timedelta
