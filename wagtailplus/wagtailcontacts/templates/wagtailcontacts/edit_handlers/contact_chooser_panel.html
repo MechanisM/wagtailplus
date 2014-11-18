@@ -1,0 +1,11 @@
+{% extends 'wagtailadmin/edit_handlers/chooser_panel.html' %}
+{% load i18n %}
+{% block chooser_class %}contact-chooser{% endblock %}
+
+{% block chosen_state_view %}
+    <span class='title'>{{ contact.name }}</span>
+{% endblock %}
+
+{% block clear_button_label %}{% trans 'Clear Choice' %}{% endblock %}
+{% block choose_another_button_label %}{% trans 'Choose Another Contact' %}{% endblock %}
+{% block choose_button_label %}{% trans 'Choose a Contact' %}{% endblock %}
