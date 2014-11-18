@@ -1,0 +1,18 @@
+{% load i18n %}
+{% if object_list %}
+    {% if is_searching %}
+        <h2>
+        {% blocktrans count counter=object_list.count %}
+            There is one match
+        {% plural %}
+            There are {{ counter }} matches
+        {% endblocktrans %}
+        </h2>
+    {% else %}
+        <h2>{% trans 'Addresses' %}</h2>
+    {% endif %}
+    {% include 'wagtailaddresses/address-chooser/list.html' with choosing=1 %}
+    {% include 'wagtailadmin/shared/pagination_nav.html' with items=page is_ajax=1 %}
+{% else %}
+    <p>{% blocktrans %}Sorry, no items match "<em>{{ query_string }}</em>"{% endblocktrans %}</p>
+{% endif %}

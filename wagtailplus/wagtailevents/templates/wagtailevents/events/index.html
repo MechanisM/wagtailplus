@@ -1,0 +1,27 @@
+{% extends 'wagtailadmin/base.html' %}
+{% load i18n %}
+
+{% block titletag %}{% trans 'Events' %}{% endblock %}
+
+{% block bodyclass %}menu-events{% endblock %}
+
+{% block extra_js %}
+    <script>
+        window.headerSearch = {
+            url:			'{% url "wagtailevents_index" %}',
+            termInput:		'#id_q',
+            targetOutput:	'#event-results'
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    {% trans 'Events' as title_str %}
+    {% trans 'Add an Event' as add_str %}
+    {% include 'wagtailadmin/shared/header.html' with title=title_str add_link='wagtailevents_add_event' icon='date' add_text=add_str search_url='wagtailevents_index' %}
+    <div class='nice-padding'>
+        <div id='event-results' class='events'>
+            {% include 'wagtailevents/events/results.html' %}
+        </div>
+    </div>
+{% endblock %}

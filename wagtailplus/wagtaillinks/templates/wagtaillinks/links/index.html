@@ -1,0 +1,27 @@
+{% extends 'wagtailadmin/base.html' %}
+{% load i18n %}
+
+{% block titletag %}{% trans 'Links' %}{% endblock %}
+
+{% block bodyclass %}menu-links{% endblock %}
+
+{% block extra_js %}
+    <script>
+        window.headerSearch = {
+            url:			'{% url "wagtaillinks_index" %}',
+            termInput:		'#id_q',
+            targetOutput:	'#link-results'
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    {% trans 'Links' as title_str %}
+    {% trans 'Add a Link' as add_str %}
+    {% include 'wagtailadmin/shared/header.html' with title=title_str add_link='wagtaillinks_add_link' icon='link' add_text=add_str search_url='wagtaillinks_index' %}
+    <div class='nice-padding'>
+        <div id='link-results' class='links'>
+            {% include 'wagtaillinks/links/results.html' %}
+        </div>
+    </div>
+{% endblock %}

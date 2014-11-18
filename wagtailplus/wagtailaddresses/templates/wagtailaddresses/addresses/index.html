@@ -1,0 +1,27 @@
+{% extends 'wagtailadmin/base.html' %}
+{% load i18n %}
+
+{% block titletag %}{% trans 'Addresses' %}{% endblock %}
+
+{% block bodyclass %}menu-addresses{% endblock %}
+
+{% block extra_js %}
+    <script>
+        window.headerSearch = {
+            url:			'{% url "wagtailaddresses_index" %}',
+            termInput:		'#id_q',
+            targetOutput:	'#address-results'
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    {% trans 'Addresses' as address_str %}
+    {% trans 'Add an Address' as add_str %}
+    {% include 'wagtailadmin/shared/header.html' with title=address_str add_link='wagtailaddresses_add_address' icon='location' add_text=add_str search_url='wagtailaddresses_index' %}
+    <div class='nice-padding'>
+        <div id='address-results' class='addresses'>
+            {% include 'wagtailaddresses/addresses/results.html' %}
+        </div>
+    </div>
+{% endblock %}

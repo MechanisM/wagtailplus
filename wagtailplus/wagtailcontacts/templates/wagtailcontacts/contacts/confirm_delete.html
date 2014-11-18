@@ -1,0 +1,16 @@
+{% extends 'wagtailadmin/base.html' %}
+{% load i18n %}
+{% block titletag %}{% blocktrans with title=instance.name %}Delete {{ title }}{% endblocktrans %}{% endblock %}
+{% block bodyclass %}contacts-menu{% endblock %}
+
+{% block content %}
+    {% trans 'Delete Contact' as del_str %}
+    {% include 'wagtailadmin/shared/header.html' with title=del_str subtitle=contact.name %}
+    <div class="nice-padding">
+        <p>{% trans 'Are you sure you want to delete this contact?' %}</p>
+        <form action="{% url 'wagtailcontacts_delete_contact' contact.id %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="{% trans 'Yes' %}" class="serious" />
+        </form>
+    </div>
+{% endblock %}

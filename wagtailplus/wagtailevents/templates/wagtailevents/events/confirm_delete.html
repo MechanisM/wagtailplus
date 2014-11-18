@@ -1,0 +1,16 @@
+{% extends 'wagtailadmin/base.html' %}
+{% load i18n %}
+{% block titletag %}{% blocktrans with title=event.name %}Delete {{ title }}{% endblocktrans %}{% endblock %}
+{% block bodyclass %}menu-events{% endblock %}
+
+{% block content %}
+    {% trans 'Delete Event' as del_str %}
+    {% include 'wagtailadmin/shared/header.html' with title=del_str subtitle=event.name %}
+    <div class="nice-padding">
+        <p>{% trans 'Are you sure you want to delete this event?' %}</p>
+        <form action="{% url 'wagtailevents_delete_event' pk=event.id %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="{% trans 'Yes' %}" class="serious" />
+        </form>
+    </div>
+{% endblock %}

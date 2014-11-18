@@ -1,0 +1,22 @@
+{% load i18n %}
+
+{% if object_list %}
+    {% if is_searching %}
+        <h2>
+        {% blocktrans count counter=object_list|length %}
+            There is one match
+        {% plural %}
+            There are {{ counter }} matches
+        {% endblocktrans %}
+        </h2>
+    {% endif %}
+    {% include 'wagtailaddresses/addresses/list.html' %}
+    {% include 'wagtailadmin/shared/pagination_nav.html' with items=page is_searching=is_searching linkurl='wagtailaddresses_index' %}
+{% else %}
+    {% if is_searching %}
+         <p>{% blocktrans %}Sorry, no addresses match '<em>{{ query_string }}</em>'{% endblocktrans %}</p>
+    {% else %}
+        {% url 'wagtailaddresses_add_address' as add_url %}
+        <p>{% blocktrans %}You haven't added any addresses. Why not <a href='{{ add_url }}'>add one now</a>?{% endblocktrans %}</p>
+    {% endif %}
+{% endif %}

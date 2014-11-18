@@ -1,0 +1,113 @@
+
+@import "../../wagtailadmin/scss/variables.scss";
+
+@font-face {
+  font-family:  "FontAwesome";
+  src:          url("#{$css-root}fonts/fontawesome-webfont.eot");
+  src:          url("#{$css-root}fonts/fontawesome-webfont.eot?#iefix") format("embedded-opentype"),
+                url("#{$css-root}fonts/fontawesome-webfont.ttf") format("truetype"),
+                url("#{$css-root}fonts/fontawesome-webfont.svg#wagtail") format("svg"),
+                url("#{$css-root}fonts/fontawesome-webfont.woff") format("woff");
+  font-weight:  normal;
+  font-style:   normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family:  "FontAwesome";
+    src:          url("#{$css-root}fonts/fontawesome-webfont.svg#fontawesomeregular") format("svg");
+  }
+}
+
+// Fix column widths for label-above form class.
+.label-above {
+  .field-col label,
+  .field-col .field-content {
+    display:  block;
+    padding:  0 0 0.8em 0;
+    float:    none;
+    width:    auto;
+  }
+}
+
+// Email icon.
+.icon-email:before {
+  font-family:  FontAwesome;
+  content:      "\f0e0";
+}
+
+// Location icon.
+.icon-location:before {
+  font-family:  FontAwesome;
+  content:      "\f041";
+}
+
+// Create email field, based on .iconfield.
+.email_field{
+  .input {
+    position: relative;
+    
+    &:before, &:after{
+      position:     absolute;
+      top:          0.5em;
+      line-height:  100%;
+      font-size:    2em;
+      color:        $color-grey-3;
+    }
+    
+    &:before{
+      left: 0.3em;
+    }
+    
+    &:after{
+      right:  0.5em;
+    }
+  }
+
+  input:not([type=radio]),
+  input:not([type=checkbox]),
+  input:not([type=submit]),
+  input:not([type=button]) {
+    padding-left: 2.5em;
+  }
+ 
+  &.field-small {
+    .input{
+      &:before, &:after{
+        font-size:  1.3rem;
+        top:        0.3em;
+      }
+      &:before{
+        left: 0.5em;
+      }
+      &:after{
+        right:  0.5em;
+      }
+    }
+  }
+
+  &.icon-spinner:after{
+    color:      $color-teal;
+    opacity:    0.8;
+    text-align: center;
+    top:        0.3em;
+  }
+
+  .input:before{
+    @extend .icon-email:before;
+  }
+}
+
+// Add some space between stats lists.
+section.panel ul.stats {
+  margin-bottom:  2em;
+  li {
+    text-align: center;
+  }
+}
+
+// Adjust location icon to appear "centered".
+.stats .icon-location:before {
+  width:        1.1em;
+  padding-left: 0.2em;
+}
