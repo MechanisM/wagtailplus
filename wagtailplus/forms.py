@@ -226,7 +226,7 @@ COUNTRIES = (
     (161, _(u'Ukraine')),
     (162, _(u'United Arab Emirates')),
     (262, _(u'United Kingdom')),
-    (164, _(u'United States')),
+    (164, _(u'United States of America')),
     (163, _(u'Uruguay')),
     (165, _(u'Uzbekistan')),
     (239, _(u'Vanuatu')),
@@ -241,7 +241,7 @@ COUNTRIES = (
     (174, _(u'Zimbabwe')),
 )
 
-class CountryField(forms.ChoiceField):
+class CountryField(forms.IntegerField):
     """
     Renders a select element populated with world countries.
     """
@@ -249,7 +249,8 @@ class CountryField(forms.ChoiceField):
         """
         Initializes the instance.
         """
-        kwargs.setdefault('choices', COUNTRIES)
+        kwargs.setdefault('widget', forms.Select(choices=COUNTRIES))
+        #kwargs.setdefault('choices', COUNTRIES)
         super(CountryField, self).__init__(*args, **kwargs)
 
     def get_internal_type(self):
@@ -258,4 +259,16 @@ class CountryField(forms.ChoiceField):
 
         :rtype: str.
         """
-        return 'ChoiceField'
+        return 'IntegerField'
+
+    def to_python(self, value):
+        """
+        Returns unicode country name corresponding to sepcified value.
+
+        :param value: integer value of country.
+        :rtype: unicode.
+        """
+        for data in COUNTRIES:
+            if data[0] == value:
+                return data[1]
+        return u''
