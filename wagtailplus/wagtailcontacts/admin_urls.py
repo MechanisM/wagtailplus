@@ -4,7 +4,7 @@ Contains admin URLs.
 from django.conf.urls import url
 from django.contrib.auth.decorators import permission_required
 
-from wagtailplus.view import chooser
+from wagtailplus.views import chooser
 from wagtailplus.views import crud
 
 from .models import Contact
