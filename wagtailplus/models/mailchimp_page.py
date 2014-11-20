@@ -3,13 +3,17 @@
 """
 import mailchimp
 from collections import OrderedDict
+from datetime import date
 
 from django import forms
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import CreateView
+from django.views.generic import FormView
 
+from wagtail.wagtailadmin.edit_handlers import FieldPanel
+from wagtail.wagtailadmin.edit_handlers import FieldRowPanel
+from wagtail.wagtailadmin.edit_handlers import MultiFieldPanel
 from wagtailplus.forms import CountryField
 
 
@@ -168,7 +172,9 @@ class MailChimpForm(forms.Form):
     
             # Finally, add the address country field.
             name = '{0}-country'.format(name)
-            fields.update({name: CountryField(initial='US')})
+            fields.update({
+                name: CountryField(label=_('Country'), initial='US')
+            })
     
         if mc_type == 'zip':
             kwargs.update({'max_length': merge_var.get('size', None)})
@@ -198,20 +204,22 @@ class MailChimpForm(forms.Form):
         kwargs      = {'label': name, 'choices': choices, 'required': False}
 
         if field_type == 'checkboxes':
-            kwargs.update({'widget': forms.MultipleChoiceField})
+            kwargs.update({'widget': forms.CheckboxSelectMultiple})
+            return forms.MultipleChoiceField(**kwargs)
 
         if field_type == 'radio':
             kwargs.update({'widget': forms.RadioSelect})
+            return forms.ChoiceField(**kwargs)
 
         if field_type == 'dropdown':
             kwargs.update({'widget': forms.Select})
+            return forms.ChoiceField(**kwargs)
 
         if field_type == 'hidden':
             kwargs.update({'widget': forms.HiddenInput})
+            return forms.ChoiceField(**kwargs)
 
-        return forms.ChoiceField(**kwargs)
-
-class MailChimpView(CreateView):
+class MailChimpView(FormView):
     """
     Displays and processes a form based on a MailChimp list.
     """
@@ -232,20 +240,54 @@ class MailChimpView(CreateView):
 
         # Add merge variable values.
         for merge_var in self.get_merge_vars():
+            mc_type = merge_var.get('field_type', '')
             name    = merge_var.get('tag', '')
             value   = form.cleaned_data.get(name, '')
+
+            # Assemble address components into a single string value per
+            # http://kb.mailchimp.com/lists/growth/format-list-fields#Address.
+            if mc_type == 'address':
+                values = []
+                for f in ['addr1', 'addr2', 'city', 'state', 'zip', 'country']:
+                    key = '{0}-{1}'.format(name, f)
+                    val = form.cleaned_data.get(key)
+                    if val:
+                        values.append(val)
+                value = '  '.join(values)
+
+            # Convert date to string.
+            if mc_type == 'date' and isinstance(value, date):
+                value = value.strftime('%m/%d/%Y')
+
+            # Convert birthday to string.
+            if mc_type == 'birthday' and isinstance(value, date):
+                value = value.strftime('%m/%d')
 
             merge_vars.update({name: value})
 
         # Add groupings.
-        for grouping in get_mailchimp_groupings():
+        for grouping in self.get_groupings():
             id      = grouping.get('id', '')
             name    = grouping.get('name', '')
             groups  = form.cleaned_data.get(name, '')
 
-            merge_vars['groupings'].append({id: id, name: name, groups: groups})
+            merge_vars['groupings'].append({
+                'id':       id,
+                'name':     name,
+                'groups':   groups if type(groups) == list else [groups],
+            })
 
         return merge_vars
+
+    def get_context_data(self, **kwargs):
+        """
+        Returns view context data dictionary.
+
+        :rtype: dict.
+        """
+        context = super(MailChimpView, self).get_context_data(**kwargs)
+        context.update({'self': self.page_instance})
+        return context
 
     def get_groupings(self):
         """
@@ -254,7 +296,7 @@ class MailChimpView(CreateView):
         :rtype: dict.
         """
         if self.groupings is None:
-            self.groupings = mailchimp_get_groupings(
+            self.groupings = get_mailchimp_groupings(
                 self.page_instance.list_id
             )
 
@@ -267,7 +309,7 @@ class MailChimpView(CreateView):
         :rtype: dict.
         """
         if self.merge_vars is None:
-            self.merge_vars = mailchimp_get_merge_vars(
+            self.merge_vars = get_mailchimp_merge_vars(
                 self.page_instance.list_id
             )
 
@@ -281,9 +323,25 @@ class MailChimpView(CreateView):
         :rtype: wagtailplus.models.mailchimp_page.MailChimpForm.
         """
         merge_vars  = self.get_merge_vars()
-        groupings   = get_mailchimp_groupings(self.page_instance.list_id)
+        groupings   = self.get_groupings()
 
         return MailChimpForm(merge_vars, groupings, **self.get_form_kwargs())
+
+    def get_template_names(self):
+        """
+        Returns list of available template names.
+
+        :rtype: list.
+        """
+        return [self.page_instance.get_template(self.request)]
+
+    def get_success_url(self):
+        """
+        Returns URL to redirect to upon successful form submittal.
+
+        :rtype: str.
+        """
+        return self.page_instance.success_url.url
 
     def form_valid(self, form):
         """
@@ -292,13 +350,16 @@ class MailChimpView(CreateView):
         :param form: the form instance.
         """
         # Subscribe to the MailChimp list.
-        clean_merge_vars = self.get_clean_merge_vars(form)
+        api                 = get_mailchimp_api()
+        clean_merge_vars    = self.get_clean_merge_vars(form)
+
+        #raise Exception(clean_merge_vars)
 
         # Must have an email address.
-        if 'EMAIL' in clean_merge_vars:
+        if api and 'EMAIL' in clean_merge_vars:
             api.lists.subscribe(
                 self.page_instance.list_id,
-                clean_merge_vars.pop('EMAIL'),
+                {'email': clean_merge_vars.pop('EMAIL')},
                 merge_vars=clean_merge_vars,
                 double_optin=self.page_instance.double_optin,
                 update_existing=self.page_instance.update_existing,
@@ -332,3 +393,15 @@ class BaseMailChimpPage(models.Model):
         """
         view = MailChimpView.as_view(page_instance=self)
         return view(request)
+
+BaseMailChimpPage.content_panels = [
+    FieldPanel('title', classname='full title'),
+    MultiFieldPanel([
+        FieldPanel('list_id'),
+        FieldPanel('double_optin'),
+        FieldPanel('update_existing'),
+        FieldPanel('replace_interests'),
+        FieldPanel('send_welcome'),
+    ], _(u'MailChimp Settings')),
+    FieldPanel('success_url'),
+]
