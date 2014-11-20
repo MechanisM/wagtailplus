@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from wagtail.wagtailadmin.edit_handlers import FieldPanel
 from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailcore.models import Orderable
-from wagtail.wagtailcore.templatetags.rich_text import richtext
+from wagtail.wagtailcore.templatetags.wagtailcore_tags import richtext
 
 
 __ALL__ = [
@@ -18,7 +18,7 @@ __ALL__ = [
 ]
 
 @python_2_unicode_compatible
-class BasePageBlock(Orderable, Publishable):
+class BasePageBlock(Orderable):
     """
     Abstract page block definition.
     """
