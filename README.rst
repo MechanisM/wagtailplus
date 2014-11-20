@@ -5,10 +5,15 @@ Wagtail Plus
 
 Wagtail Plus is a collection of add-ons for `Wagtail CMS <https://github.com/torchbox/wagtail>`_, featuring:
 
-* Link (external and email) storage and management, fully integrated with page editor
-* Event storage and management, including support for pattern-based repeating events
-* GeoDjango-enabled address storage and management (defaults to standard classes if :code:`django.contrib.gis` is not installed)
-* Simple contact storage and management
+* Link (external and email) storage and management, fully integrated with page editor.
+* Event storage and management, including support for pattern-based repeating events.
+* GeoDjango-enabled address storage and management (defaults to standard classes if :code:`django.contrib.gis` is not installed).
+* Simple contact storage and management.
+
+Wagtail Plus also includes the following abstract models:
+
+* BaseMailChimpPage: stores MailChimp settings with page and renders/processes a subscription form based on a MailChimp list.
+* BaseMultiBlockPage: stores multiple HTML blocks with page, each of which can be assigned CSS styles.
 
 Installation
 ~~~~~~~~~~~~
