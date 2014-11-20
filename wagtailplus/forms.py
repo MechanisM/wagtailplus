@@ -209,12 +209,13 @@ class MailChimpForm(forms.Form):
     """
     MailChimp list-based form class.
     """
-    def __init__(self, merge_vars, *args, **kwargs):
+    def __init__(self, merge_vars, groupings=[], *args, **kwargs):
         """
         Initailizes the form instance, adding fields for specified
-        MailChimp merge variables.
+        MailChimp merge variables and groupings.
 
         :param merge_vars: list of merge variable dictionaries.
+        :param groupings: list of grouping dictionaries.
         """
         # Initialize the form instance.
         super(MailChimpForm, self).__init__(*args, **kwargs)
@@ -224,6 +225,12 @@ class MailChimpForm(forms.Form):
             for data in self.mailchimp_field_factory(merge_var).items():
                 name, field = data
                 self.fields.update({name: field})
+
+        # Add grouping fields.
+        for grouping in groupings:
+            name    = grouping.get('name', '')
+            field   = self.mailchimp_grouping_factory(grouping)
+            self.fields.update({name: field})
 
     def mailchimp_field_factory(self, merge_var):
         """
@@ -326,3 +333,30 @@ class MailChimpForm(forms.Form):
             fields.update({name: forms.URLField(**kwargs)})
     
         return fields
+
+    def mailchimp_grouping_factory(self, grouping):
+        """
+        Returns form field instance for specified MailChimp grouping.
+
+        :param grouping: grouping dictionary.
+        :rtype: django.forms.Field.
+        """
+        field_type  = grouping.get('form_field', None)
+        name        = grouping.get('name', None)
+        groups      = grouping.get('groups', [])
+        choices     = ((x['name'], x['name']) for x in groups)
+        kwargs      = {'label': name, 'choices': choices, 'required': False}
+
+        if field_type == 'checkboxes':
+            kwargs.update({'widget': forms.MultipleChoiceField})
+
+        if field_type == 'radio':
+            kwargs.update({'widget': forms.RadioSelect})
+
+        if field_type == 'dropdown':
+            kwargs.update({'widget': forms.Select})
+
+        if field_type == 'hidden':
+            kwargs.update({'widget': forms.HiddenInput})
+
+        return forms.ChoiceField(**kwargs)
