@@ -8,6 +8,7 @@ from datetime import date
 from django import forms
 from django.conf import settings
 from django.db import models
+from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 
@@ -312,6 +313,11 @@ class MailChimpView(FormView):
             self.merge_vars = get_mailchimp_merge_vars(
                 self.page_instance.list_id
             )
+
+        # If we don't have any merge variables to build a form from,
+        # raise an HTTP 404 error.
+        if not self.merge_vars:
+            raise Http404
 
         return self.merge_vars
 
