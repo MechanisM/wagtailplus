@@ -407,11 +407,17 @@ class BaseMailChimpPage(models.Model):
 BaseMailChimpPage.content_panels = [
     FieldPanel('title', classname='full title'),
     MultiFieldPanel([
-        FieldPanel('list_id'),
-        FieldPanel('double_optin'),
-        FieldPanel('update_existing'),
-        FieldPanel('replace_interests'),
-        FieldPanel('send_welcome'),
+        FieldRowPanel([
+            FieldPanel('list_id', classname='col12'),
+        ], classname='label-above'),
+        FieldRowPanel([
+            FieldPanel('double_optin', classname='col6'),
+            FieldPanel('update_existing', classname='col6'),
+        ], classname='label-above'),
+        FieldRowPanel([
+            FieldPanel('replace_interests', classname='col6'),
+            FieldPanel('send_welcome', classname='col6'),
+        ], classname='label-above'),
     ], _(u'MailChimp Settings')),
     FieldPanel('success_url'),
 ]
