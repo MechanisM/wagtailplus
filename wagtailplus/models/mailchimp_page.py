@@ -101,6 +101,7 @@ class MailChimpForm(forms.Form):
         fields  = OrderedDict()
         mc_type = merge_var.get('field_type', None)
         name    = merge_var.get('tag', '')
+        visible = merge_var.get('show', True)
         kwargs  = {
             'label':        merge_var.get('name', None),
             'required':     merge_var.get('req', True),
@@ -108,33 +109,38 @@ class MailChimpForm(forms.Form):
             'help_text':    merge_var.get('helptext', None)
         }
 
+        if not visible:
+            kwargs.update({'widget': forms.HiddenInput})
+            fields.update({name: forms.CharField(**kwargs)})
+            return fields
+
         if mc_type == 'email':
             kwargs.update({'max_length': merge_var.get('size', None)})
             fields.update({name: forms.EmailField(**kwargs)})
-    
+
         if mc_type == 'text':
             kwargs.update({'max_length': merge_var.get('size', None)})
             fields.update({name: forms.CharField(**kwargs)})
-    
+
         if mc_type == 'number':
             fields.update({name: forms.IntegerField(**kwargs)})
-    
+
         if mc_type == 'radio':
             kwargs.update({
                 'choices':  ((x, x) for x in merge_var.get('choices', [])),
                 'widget':   forms.RadioSelect
             })
             fields.update({name: forms.ChoiceField(**kwargs)})
-    
+
         if mc_type == 'dropdown':
             kwargs.update({
                 'choices':  ((x, x) for x in merge_var.get('choices', []))
             })
             fields.update({name: forms.ChoiceField(**kwargs)})
-    
+
         if mc_type == 'date' or mc_type == 'birthday':
             fields.update({name: forms.DateField(**kwargs)})
-    
+
         if mc_type == 'address':
             # Define keyword agruments for each charfield component.
             char_fields = [
@@ -169,30 +175,30 @@ class MailChimpForm(forms.Form):
                     'max_length':   10,
                 },
             ]
-    
+
             # Add the address charfields.
             for kwargs in char_fields:
                 field_name = kwargs.pop('name')
                 fields.update({field_name: forms.CharField(**kwargs)})
-    
+
             # Finally, add the address country field.
             name = '{0}-country'.format(name)
             fields.update({
                 name: CountryField(label=_('Country'), initial='US')
             })
-    
+
         if mc_type == 'zip':
             kwargs.update({'max_length': merge_var.get('size', None)})
             fields.update({name: forms.CharField(**kwargs)})
-    
+
         if mc_type == 'phone':
             kwargs.update({'max_length': merge_var.get('size', None)})
             fields.update({name: forms.CharField(**kwargs)})
-    
+
         if mc_type == 'url' or mc_type == 'imageurl':
             kwargs.update({'max_length': merge_var.get('size', None)})
             fields.update({name: forms.URLField(**kwargs)})
-    
+
         return fields
 
     def mailchimp_grouping_factory(self, grouping):
