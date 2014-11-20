@@ -107,7 +107,7 @@ class MailChimpForm(forms.Form):
             'initial':      merge_var.get('default', None),
             'help_text':    merge_var.get('helptext', None)
         }
-    
+
         if mc_type == 'email':
             kwargs.update({'max_length': merge_var.get('size', None)})
             fields.update({name: forms.EmailField(**kwargs)})
@@ -394,7 +394,7 @@ class BaseMailChimpPage(models.Model):
     class Meta(object):
         abstract = True
 
-    def serve_as_mailchimp(self, request):
+    def serve(self, request):
         """
         Serves the page as a MailChimpView.
 
