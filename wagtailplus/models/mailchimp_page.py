@@ -1,5 +1,5 @@
 """
-
+Contains MailChimp page-related class definitions.
 """
 import mailchimp
 from collections import OrderedDict
