@@ -12,6 +12,11 @@ from wagtail.wagtailcore.models import Orderable
 from wagtail.wagtailcore.templatetags.rich_text import richtext
 
 
+__ALL__ = [
+    'BasePageBlock',
+    'BaseMultiBlockPage',
+]
+
 @python_2_unicode_compatible
 class BasePageBlock(Orderable, Publishable):
     """
