@@ -22,8 +22,8 @@ class BasePageBlock(Orderable, Publishable):
     """
     Abstract page block definition.
     """
-    css     = models.CharField(_(u'CSS Class'), max_length=100, null=True, blank=True, help_text=_(u'Enter an optional CSS class string for this block'))
-    content = RichTextField(_(u'Content'), null=True, blank=True, help_text=_(u'Enter the content for this block'))
+    css     = models.CharField(_(u'CSS Class'), max_length=100, blank=True, help_text=_(u'Enter an optional CSS class string for this block'))
+    content = RichTextField(_(u'Content'), blank=True, help_text=_(u'Enter the content for this block'))
 
     panels  = [
         FieldPanel('css'),
