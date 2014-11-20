@@ -52,6 +52,7 @@ urlpatterns = [
         r'^chooser/$',
         chooser.ChooseView.as_view(
             model=Event,
+            chooser_template='wagtailevents/chooser/chooser.html',
             results_template='wagtailevents/chooser/results.html',
             chooser_javascript='wagtailevents/chooser/chooser.js'
         ),
@@ -61,7 +62,7 @@ urlpatterns = [
         r'^chooser/create/$',
         chooser.CreateView.as_view(
             model=Event,
-            chooser_template='wagtailevents/chooser/results.html',
+            chooser_template='wagtailevents/chooser/chooser.html',
             chooser_javascript='wagtailevents/chooser/chooser.js',
             chosen_javascript='wagtailevents/chooser/chosen.js'
         ),

@@ -14,6 +14,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from modelcluster.fields import ParentalKey
+from natural.number import ordinal
 from taggit.managers import TaggableManager
 from wagtail.wagtailadmin.edit_handlers import FieldPanel
 from wagtail.wagtailadmin.edit_handlers import FieldRowPanel
@@ -25,7 +26,7 @@ from wagtail.wagtailcore.models import Page
 from wagtail.wagtailsearch import index
 from wagtail.wagtailsnippets.models import register_snippet
 
-from natural.number import ordinal
+from .edit_handlers import EventChooserPanel
 
 
 NTH_WEEKDAYS = (
@@ -415,7 +416,7 @@ class BaseEventPage(models.Model):
 
 BaseEventPage.content_panels = [
     FieldPanel('title', classname='full title'),
-    FieldPanel('event'),
+    EventChooserPanel('event'),
     MultiFieldPanel([
         FieldRowPanel([
             FieldPanel('date', classname='col12'),

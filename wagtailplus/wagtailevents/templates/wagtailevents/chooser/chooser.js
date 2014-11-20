@@ -101,4 +101,7 @@ function(modal) {
     }
     
     detectErrors();
+    
+    //initDateChooser('id_start_date');
+    //initDateChooser('id_end_date');
 }

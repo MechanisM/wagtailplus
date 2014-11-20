@@ -45,7 +45,7 @@
             <tr>
                 <td class="title">
                     {% if choosing %}
-						<h2><a href="{% url 'wagtailaddresses_address_chosen' instance.id %}" class="address-choice">{{ instance.name }}</a></h2>
+						<h2><a href="{% url 'wagtailevents_event_chosen' instance.id %}" class="event-choice">{{ instance.name }}</a></h2>
                     {% else %}
                         <h2><a href="{% url 'wagtailevents_edit_event' instance.id %}">{{ instance.name }}</a></h2>
                     {% endif %}
