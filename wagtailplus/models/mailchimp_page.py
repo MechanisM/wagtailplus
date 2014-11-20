@@ -18,6 +18,10 @@ from wagtail.wagtailadmin.edit_handlers import MultiFieldPanel
 from wagtailplus.forms import CountryField
 
 
+__ALL__ = [
+    'BaseMailChimpPage',
+]
+
 def get_mailchimp_api():
     """
     Returns MailChimp API wrapper instance.
