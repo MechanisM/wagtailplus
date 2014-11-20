@@ -423,5 +423,5 @@ BaseEventPage.content_panels = [
             FieldPanel('start', classname='col6'),
             FieldPanel('end', classname='col6'),
         ], classname='label-above'),
-    ], 'Event Details', classname='publishing'),
+    ], _('Event Details'), classname='publishing'),
 ]
