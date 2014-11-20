@@ -12,8 +12,8 @@ Wagtail Plus is a collection of add-ons for `Wagtail CMS <https://github.com/tor
 
 Wagtail Plus also includes the following abstract models:
 
-* BaseMailChimpPage: stores MailChimp settings with page and renders/processes a subscription form based on a MailChimp list.
-* BaseMultiBlockPage: stores multiple HTML blocks with page, each of which can be assigned CSS styles.
+* :code:`BaseMailChimpPage`: stores MailChimp settings with page and renders/processes a subscription form based on a MailChimp list.
+* :code:`BaseMultiBlockPage`: stores multiple HTML blocks with page, each of which can be assigned CSS styles.
 
 Installation
 ~~~~~~~~~~~~
