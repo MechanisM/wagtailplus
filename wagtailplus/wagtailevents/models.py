@@ -151,9 +151,13 @@ class EventManager(models.Manager):
         :param event: the event instance.
         :rtype: datetime.date.
         """
-        # If the event's start and end dates are the same, return it.
+        # If the event's start and end dates are the same and it
+        # hasn't occurred yet, return it.
         if event.start_date == event.end_date:
-            return event.start_date
+            if event.start_date > timezone.now().date():
+                return event.start_date
+            else:
+                return None
 
         # Use valid date generator to find the next valid event date.
         start       = timezone.now().date()
@@ -195,7 +199,7 @@ class EventFrequency(models.Model):
 
         :rtype: str.
         """
-        label = 'Every Day'
+        label = None
         if self.day_of_week:
             day_name    = unicode(DAYS_OF_WEEK[self.day_of_week][1])
             label       = 'Every {0}'.format(day_name)
@@ -274,7 +278,7 @@ class Event(models.Model, TagSearchable):
         """
         if self.frequencies.count() > 0:
             return ', '.join([str(f) for f in self.frequencies.all()])
-        return 'Every Day'
+        return None
 
     @property
     def next_occurrence(self):
