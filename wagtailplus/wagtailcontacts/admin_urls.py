@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import permission_required
 from wagtailplus.views import chooser
 from wagtailplus.views import crud
 
+from .forms import ContactForm
 from .models import Contact
 
 
@@ -54,7 +55,8 @@ urlpatterns = [
             model=Contact,
             chooser_template='wagtailcontacts/chooser/chooser.html',
             results_template='wagtailcontacts/chooser/results.html',
-            chooser_javascript='wagtailcontacts/chooser/chooser.js'
+            chooser_javascript='wagtailcontacts/chooser/chooser.js',
+            form_class=ContactForm
         ),
         name='wagtailcontacts_contact_chooser'
     ),
@@ -62,9 +64,10 @@ urlpatterns = [
         r'^chooser/create/$',
         chooser.CreateView.as_view(
             model=Contact,
-            chooser_template='wagtailcontacts/chooser/results.html',
+            chooser_template='wagtailcontacts/chooser/chooser.html',
             chooser_javascript='wagtailcontacts/chooser/chooser.js',
-            chosen_javascript='wagtailcontacts/chooser/chosen.js'
+            chosen_javascript='wagtailcontacts/chooser/chosen.js',
+            form_class=ContactForm
         ),
         name='wagtailcontacts_contact_chooser_create'
     ),
