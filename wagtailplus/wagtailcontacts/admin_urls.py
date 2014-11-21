@@ -52,6 +52,7 @@ urlpatterns = [
         r'^chooser/$',
         chooser.ChooseView.as_view(
             model=Contact,
+            chooser_template='wagtailcontacts/chooser/chooser.html',
             results_template='wagtailcontacts/chooser/results.html',
             chooser_javascript='wagtailcontacts/chooser/chooser.js'
         ),

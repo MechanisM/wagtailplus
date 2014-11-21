@@ -25,7 +25,7 @@
             <tr>
                 <td class="title">
                     {% if choosing %}
-
+                        <h2><a href="{% url 'wagtailcontacts_contact_chosen' instance.id %}" class="contact-choice">{{ instance.name }}</a></h2>
                     {% else %}
                         <h2><a href="{% url 'wagtailcontacts_edit_contact' pk=instance.id %}">{{ instance.name }}</a></h2>
                     {% endif %}
