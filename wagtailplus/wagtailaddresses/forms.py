@@ -1,3 +1,6 @@
+"""
+Contains form class definitions.
+"""
 from django import forms
 
 from .app_settings import ADDRESS_ATTR_MAP
