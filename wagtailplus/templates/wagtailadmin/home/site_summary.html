@@ -1,0 +1,78 @@
+{% load home_page_tags %}
+{% load i18n %}
+<section class="panel summary nice-padding">
+    <h2 class="visuallyhidden">{% trans "Site summary" %}</h2>
+    <ul class="stats">
+        <li class="icon icon-doc-empty-inverse">
+            <a href="{% url 'wagtailadmin_explore_root' %}">
+            {% blocktrans count counter=total_pages %}
+                <span>{{ total_pages }}</span> Page
+            {% plural %}
+                <span>{{ total_pages }}</span> Pages
+            {% endblocktrans %}
+            </a>
+        </li>
+        <li class="icon icon-image">
+            <a href="{% url 'wagtailimages_index' %}">
+            {% blocktrans count counter=total_images %}
+                <span>{{ total_images }}</span> Image
+            {% plural %}
+                <span>{{ total_images }}</span> Images
+            {% endblocktrans %}
+            </a>
+        </li>
+        <li class="icon icon-doc-full-inverse">
+            <a href="{% url 'wagtaildocs_index' %}">
+            {% blocktrans count counter=total_docs %}
+                <span>{{ total_docs }}</span> Document
+            {% plural %}
+                <span>{{ total_docs }}</span> Documents
+            {% endblocktrans %}
+            </a>
+        </li>
+    </ul>
+    <ul class="stats">
+        <li class="icon icon-link">
+            <a href="{% url 'wagtaillinks_index' %}">
+            {% total_links as total_links %}
+            {% blocktrans count counter=total_links %}
+                <span>{{ total_links }}</span> Link
+            {% plural %}
+                <span>{{ total_links }}</span> Links
+            {% endblocktrans %}
+            </a>
+        </li>
+        <li class="icon icon-date">
+            <a href="{% url 'wagtailevents_index' %}">
+            {% total_events as total_events %}
+            {% blocktrans count counter=total_events %}
+                <span>{{ total_events }}</span> Event
+            {% plural %}
+                <span>{{ total_events }}</span> Events
+            {% endblocktrans %}
+            </a>
+        </li>
+        <li class="icon icon-location">
+            <a href="{% url 'wagtailaddresses_index' %}">
+            {% total_addresses as total_addresses %}
+            {% blocktrans count counter=total_addresses %}
+                <span>{{ total_addresses }}</span> Address
+            {% plural %}
+                <span>{{ total_addresses }}</span> Addresses
+            {% endblocktrans %}
+            </a>
+        </li>
+    </ul>
+    <ul class="stats">
+        <li class="icon icon-user">
+            <a href="{% url 'wagtailcontacts_index' %}">
+            {% total_contacts as total_contacts %}
+            {% blocktrans count counter=total_contacts %}
+                <span>{{ total_contacts }}</span> Contact
+            {% plural %}
+                <span>{{ total_contacts }}</span> Contacts
+            {% endblocktrans %}
+            </a>
+        </li>
+    </ul>
+</section>

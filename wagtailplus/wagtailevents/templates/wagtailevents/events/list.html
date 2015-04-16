@@ -1,0 +1,56 @@
+{% load i18n %}
+
+<table class="listing">
+    <col />
+    <col />
+    <col width="16%" />
+    <thead>
+        <tr class="table-headers">
+            <th>
+                {% trans 'Event' %}
+                {% if not is_searching %}
+                    {% if ordering == "name" %}
+                        <a href="{% url 'wagtailevents_index' %}" class="icon icon-arrow-down-after teal"></a>
+                    {% else %}
+                        <a href="{% url 'wagtailevents_index' %}?ordering=name" class="icon icon-arrow-down-after"></a>
+                    {% endif %}
+                {% endif %}
+            </th>
+            <th>
+                {% trans 'Start Date' %}
+                {% if not is_searching %}
+                    {% if ordering == "-start_date" %}
+                        <a href="{% url 'wagtailevents_index' %}" class="icon icon-arrow-down-after teal"></a>
+                    {% else %}
+                        <a href="{% url 'wagtailevents_index' %}?ordering=-start_date" class="icon icon-arrow-down-after"></a>
+                    {% endif %}
+                {% endif %}
+            </th>
+            <th>
+                {% trans 'End Date' %}
+                {% if not is_searching %}
+                    {% if ordering == "-end_date" %}
+                        <a href="{% url 'wagtailevents_index' %}" class="icon icon-arrow-down-after teal"></a>
+                    {% else %}
+                        <a href="{% url 'wagtailevents_index' %}?ordering=-end_date" class="icon icon-arrow-down-after"></a>
+                    {% endif %}
+                {% endif %}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for instance in object_list %}
+            <tr>
+                <td class="title">
+                    {% if choosing %}
+						<h2><a href="{% url 'wagtailevents_event_chosen' instance.id %}" class="event-choice">{{ instance.title }}</a></h2>
+                    {% else %}
+                        <h2><a href="{% url 'wagtailevents_edit_event' instance.id %}">{{ instance.title }}</a></h2>
+                    {% endif %}
+                </td>
+                <td>{{ instance.start }}</td>
+                <td>{{ instance.end }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

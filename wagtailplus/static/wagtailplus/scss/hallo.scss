@@ -1,0 +1,53 @@
+
+@import "../../wagtailadmin/scss/variables.scss";
+
+@font-face {
+  font-family:  "FontAwesome";
+  src:          url("#{$css-root}fonts/fontawesome-webfont.eot");
+  src:          url("#{$css-root}fonts/fontawesome-webfont.eot?#iefix") format("embedded-opentype"),
+                url("#{$css-root}fonts/fontawesome-webfont.ttf") format("truetype"),
+                url("#{$css-root}fonts/fontawesome-webfont.svg#wagtail") format("svg"),
+                url("#{$css-root}fonts/fontawesome-webfont.woff") format("woff");
+  font-weight:  normal;
+  font-style:   normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family:  "FontAwesome";
+    src:          url("#{$css-root}fonts/fontawesome-webfont.svg#fontawesomeregular") format("svg");
+  }
+}
+
+// FontAwesome code icon.
+.hallotoolbar .icon-code:before {
+  font-family:  FontAwesome;
+  content:      "\f121";
+}
+
+// Make HTML source textarea tall.
+.edit-html-source textarea {
+  height: 400px;
+}
+
+// Make inline forms a little wider.
+@media screen and (min-width: $breakpoint-mobile) {
+  .field-content {
+    width:  100%;
+  }
+  .object {
+    .multiple {
+      width:  100%;
+      > li {
+        padding-right:  20px;
+      }
+      .icon-code:before {
+        font-family:  "FontAwesome";
+        content:      "\f121";
+      }
+      fieldset {
+        width:  100%;
+      }
+    }
+  }
+}

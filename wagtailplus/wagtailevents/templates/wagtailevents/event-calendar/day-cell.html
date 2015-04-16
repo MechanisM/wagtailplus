@@ -1,0 +1,14 @@
+<span class="day-number">{{ date|date:'d' }}</span>
+{% if events %}
+    <ul class="events">
+        {% for data in events %}
+            {% if data.pages %}
+                {% for page in data.pages %}
+                    <li><a href="{{ page.url }}">{% if page.start %}{{ page.start|date:'g:i A' }} {% endif %}{{ page.title }}</a></li>
+                {% endfor %}
+            {% else %}
+                <li>{{ data.event.name }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endif %}

@@ -1,0 +1,44 @@
+{% load i18n %}
+
+<table class="listing">
+    <col />
+    <col />
+    <col width="16%" />
+    <thead>
+        <tr class="table-headers">
+            <th>
+                {% trans 'Contact' %}
+                {% if not is_searching %}
+                    {% if ordering == "name" %}
+                        <a href="{% url 'wagtailcontacts_index' %}" class="icon icon-arrow-down-after teal"></a>
+                    {% else %}
+                        <a href="{% url 'wagtailcontacts_index' %}?ordering=name" class="icon icon-arrow-down-after"></a>
+                    {% endif %}
+                {% endif %}
+            </th>
+            <th>{% trans 'Email' %}</th>
+            <th>{% trans 'Telephone' %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for instance in object_list %}
+            <tr>
+                <td class="title">
+                    {% if choosing %}
+                        <h2><a href="{% url 'wagtailcontacts_contact_chosen' instance.id %}" class="contact-choice">{{ instance.name }}</a></h2>
+                    {% else %}
+                        <h2><a href="{% url 'wagtailcontacts_edit_contact' pk=instance.id %}">{{ instance.name }}</a></h2>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if instance.email %}
+                        <a href="mailto:{{ instance.email }}" title="Send an Email to {{ instance.name }}">{{ instance.email }}</a>
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+                <td>{{ instance.telephone|default:'N/A' }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,27 @@
+{% extends 'wagtailadmin/base.html' %}
+{% load i18n %}
+
+{% block titletag %}{% trans 'Contacts' %}{% endblock %}
+
+{% block bodyclass %}menu-contacts{% endblock %}
+
+{% block extra_js %}
+    <script>
+        window.headerSearch = {
+            url:			'{% url "wagtailcontacts_index" %}',
+            termInput:		'#id_q',
+            targetOutput:	'#contact-results'
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    {% trans 'Contacts' as title_str %}
+    {% trans 'Add a Contact' as add_str %}
+    {% include 'wagtailadmin/shared/header.html' with title=title_str add_link='wagtailcontacts_add_contact' icon='group' add_text=add_str search_url='wagtailcontacts_index' %}
+    <div class='nice-padding'>
+        <div id='contact-results' class='contacts'>
+            {% include 'wagtailcontacts/contacts/results.html' %}
+        </div>
+    </div>
+{% endblock %}

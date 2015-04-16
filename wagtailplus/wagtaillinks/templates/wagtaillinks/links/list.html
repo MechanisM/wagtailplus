@@ -1,0 +1,35 @@
+{% load i18n %}
+<table class="listing">
+    <col />
+    <col />
+    <col width="16%" />
+    <thead>
+        <tr class="table-headers">
+            <th>
+                {% trans 'Link' %}
+                {% if not is_searching %}
+                    {% if ordering == 'title' %}
+                        <a href="{% url 'wagtaillinks_index' %}" class="icon icon-arrow-down-after teal"></a>
+                    {% else %}
+                        <a href="{% url 'wagtaillinks_index' %}?ordering=title" class="icon icon-arrow-down-after"></a>
+                    {% endif %}
+                {% endif %}
+            </th>
+            <th>URL</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for instance in object_list %}
+            <tr>
+                <td class="title">
+                    {% if choosing %}
+                        <h2><a href="{% url 'wagtaillinks_link_chosen' pk=instance.id %}" class="link-choice">{{ instance.title }}</a></h2>
+                    {% else %}
+                        <h2><a href="{% url 'wagtaillinks_edit_link' pk=instance.id %}" class="link-choice">{{ instance.title }}</a></h2>
+                    {% endif %}
+                </td>
+                <td><a href="{{ instance.url }}" target="_blank">{{ instance.url }}</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

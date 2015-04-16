@@ -1,0 +1,25 @@
+{% load i18n %}
+{% load wagtailadmin_tags %}
+{% include 'wagtailadmin/shared/header.html' with title='HTML Source Code' tabbed=1 merged=1 %}
+
+<div class="tab-content">
+    <section id="edit" class="active nice-padding">
+        <form class="edit-html-source" action="" method="GET">
+            <ul class="fields">
+                <li>
+                    <div class="field">
+                        <label>HTML Source</label>
+                        <div class="field-content">
+                            <div class="input">
+                                <textarea name="source"></textarea>
+                            </div>
+                            <p class="help">Edit HTML source directly - only if you know what you're doing!</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="submit"><input type="button" value="Update" /></li>
+            </ul>
+        </form>
+
+    </section>
+</div>
