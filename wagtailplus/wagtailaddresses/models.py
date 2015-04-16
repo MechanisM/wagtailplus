@@ -115,8 +115,8 @@ class AddressManager(addr_mgr):
                 defaults={'geom': get_geom_from_data(data)},
                 **comps
             )
-        else:
-            raise ValueError('Unable to parse "{0}"'.format(addr_str))
+
+        return (None, False)
 
 @python_2_unicode_compatible
 class AddressComponent(models.Model, TagSearchable):
