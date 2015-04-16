@@ -89,9 +89,9 @@ class BetterPageLinkHandler(BetterHandler):
 
 class BetterLinkHandler(BetterHandler):
     """
-    LinkHandler will be invoked whenever we encounter an element in HTML 
-    content with an attribute of data-embedtype="link". The resulting
-    element in the database representation will be:
+    BetterLinkHandler will be invoked whenever we encounter an element
+    in HTML content with an attribute of data-embedtype="link". The
+    resulting element in the database representation will be:
     <a data-linktype="link" data-id="42" href="[url]">.
     """
     model = Link
