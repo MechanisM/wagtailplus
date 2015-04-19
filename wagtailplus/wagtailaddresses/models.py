@@ -2,7 +2,11 @@
 Contains model class definitions.
 """
 import json
-import urllib2
+
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import urlopen
 
 from django.conf import settings
 from django.contrib.gis.geos import Point
@@ -55,7 +59,7 @@ def get_address_data(addr_str):
         )
     
         try:
-            response    = urllib2.urlopen(url)
+            response    = urlopen(url)
             data        = json.loads(response.read())
             return data['results'][0]
         except:
